@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="TemperatureService"
+ targetNamespace="http://example.com/temperature"
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:tns="http://example.com/temperature"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <types>
+    <xsd:schema targetNamespace="http://example.com/temperature">
+
+      <!-- CelsiusToFahrenheit -->
+      <xsd:element name="CelsiusToFahrenheit">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="celsius" type="xsd:float"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- FahrenheitToCelsius -->
+      <xsd:element name="FahrenheitToCelsius">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fahrenheit" type="xsd:float"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- CelsiusToKelvin -->
+      <xsd:element name="CelsiusToKelvin">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="celsius" type="xsd:float"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- Response -->
+      <xsd:element name="Response">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fahrenheit" type="xsd:float" minOccurs="0"/>
+            <xsd:element name="celsius" type="xsd:float" minOccurs="0"/>
+            <xsd:element name="kelvin" type="xsd:float" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+    </xsd:schema>
+  </types>
+
+  <!-- MESSAGES -->
+  <message name="CtoFRequest">
+    <part name="parameters" element="tns:CelsiusToFahrenheit"/>
+  </message>
+
+  <message name="FtoCRequest">
+    <part name="parameters" element="tns:FahrenheitToCelsius"/>
+  </message>
+
+  <message name="CtoKRequest">
+    <part name="parameters" element="tns:CelsiusToKelvin"/>
+  </message>
+
+  <message name="ResponseMessage">
+    <part name="parameters" element="tns:Response"/>
+  </message>
+
+  <!-- PORT TYPE -->
+  <portType name="TemperaturePortType">
+
+    <operation name="CelsiusToFahrenheit">
+      <input message="tns:CtoFRequest"/>
+      <output message="tns:ResponseMessage"/>
+    </operation>
+
+    <operation name="FahrenheitToCelsius">
+      <input message="tns:FtoCRequest"/>
+      <output message="tns:ResponseMessage"/>
+    </operation>
+
+    <operation name="CelsiusToKelvin">
+      <input message="tns:CtoKRequest"/>
+      <output message="tns:ResponseMessage"/>
+    </operation>
+
+  </portType>
+
+  <!-- BINDING -->
+  <binding name="TemperatureBinding" type="tns:TemperaturePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <operation name="CelsiusToFahrenheit">
+      <soap:operation soapAction="CtoF"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+
+    <operation name="FahrenheitToCelsius">
+      <soap:operation soapAction="FtoC"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+
+    <operation name="CelsiusToKelvin">
+      <soap:operation soapAction="CtoK"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+
+  </binding>
+
+  <!-- SERVICE -->
+  <service name="TemperatureService">
+    <port name="TemperaturePort" binding="tns:TemperatureBinding">
+      <soap:address location="http://localhost:8001/temperature"/>
+    </port>
+  </service>
+
+</definitions>
